@@ -137,8 +137,8 @@ def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_pat
 
         if not overwrite_info:
             print('\ncheck that we are not overwriting existing info file.')
-            assert storage.exists('info')
-            assert thumbnail_storage.exists('info')
+            assert not storage.exists('info')
+            assert not thumbnail_storage.exists('info')
 
         print('create and upload info file to ', layer_path)
         # Note that cloudvolume use fortran order rather than C order
