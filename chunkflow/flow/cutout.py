@@ -40,7 +40,7 @@ class CutoutOperator(OperatorBase):
             progress=self.verbose,
             mip=self.mip,
             cache=False,
-            green_threads=True)
+            green_threads=False)
 
     def __call__(self, output_bbox):
         #gevent.monkey.patch_all(thread=False)
@@ -116,7 +116,7 @@ class CutoutOperator(OperatorBase):
                                    progress=self.verbose,
                                    mip=self.validate_mip,
                                    cache=False,
-                                   green_threads=True)
+                                   green_threads=False)
 
 
         chunk_mip = self.mip
