@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+from functools import reduce
 
 import numpy as np
 
@@ -14,6 +15,12 @@ from chunkflow.lib.create_bounding_boxes import create_bounding_boxes
 
 def tuple2string(tp: tuple):
     return ' '.join(str(i) for i in tp)
+
+def closest_factor(n, target):
+    factors = list(reduce(list.__add__,
+        ([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
+    factors.sort(key=lambda x: abs(target-x))
+    return factors[0]
 
 def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_path, 
               max_ram_size, output_patch_size, input_patch_size, channel_num, dtype, 
@@ -89,6 +96,9 @@ def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_pat
                 cost = current_cost
                 patch_num = (pnz, pnxy, pnxy)
     
+    ideal_size = [32,256,256]
+    cv_size = [closest_factor(block_size[i], ideal_size[i]) for i in range(3)]
+
     print('\n--input-patch-size ', tuple2string(input_patch_size))
     print('--output-patch-size ', tuple2string(output_patch_size))
     print('--output-patch-overlap ', tuple2string(output_patch_overlap))
@@ -148,7 +158,7 @@ def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_pat
                                            resolution=voxel_size[::-1],
                                            voxel_offset=volume_start[::-1],
                                            volume_size=volume_size[::-1],
-                                           chunk_size=block_size[::-1],
+                                           chunk_size=cv_size[::-1],
                                            max_mip=mip)
         vol = CloudVolume(layer_path, info=info)
         vol.commit_info()
