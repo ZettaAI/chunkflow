@@ -269,7 +269,7 @@ def generate_tasks(layer_path, mip, roi_start, chunk_size,
               type=click.Choice(['raw', 'jpeg', 'compressed_segmentation', 
                                  'fpzip', 'kempressed']), default='raw', 
               help='Neuroglancer precomputed block compression algorithm.')
-@click.option('--voxel-size', '-v', type=int, nargs=3, default=(40, 4, 4),
+@click.option('--voxel-size', '-v', type=float, nargs=3, default=(40, 4, 4),
               help='voxel size or resolution of mip 0 image.')
 @click.option('--overwrite-info/--no-overwrite-info', default=False,
               help='normally we should avoid overwriting info file to avoid errors.')
