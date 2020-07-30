@@ -361,9 +361,13 @@ class Inferencer(object):
                 start = time.time()
 
             batch_slices = self.patch_slices_list[i:i + self.batch_size]
+            empty_batch = True
             for batch_idx, slices in enumerate(batch_slices):
+                input_slice = input_chunk.cutout(slices[0]).array
+                if np.any(input_slice != 0):
+                    empty_batch = False
                 self.input_patch_buffer[
-                    batch_idx, 0, :, :, :] = input_chunk.cutout(slices[0]).array
+                    batch_idx, 0, :, :, :] = input_slice
 
             if self.verbose > 1:
                 end = time.time()
@@ -374,7 +378,10 @@ class Inferencer(object):
             # the input and output patch is a 5d numpy array with
             # datatype of float32, the dimensions are batch/channel/z/y/x.
             # the input image should be normalized to [0,1]
-            output_patch = self.patch_inferencer(self.input_patch_buffer)
+            if empty_batch:
+                output_patch = self.input_patch_buffer
+            else:
+                output_patch = self.patch_inferencer(self.input_patch_buffer)
 
             if self.verbose > 1:
                 assert output_patch.ndim == 5
