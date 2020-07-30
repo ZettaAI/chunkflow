@@ -4,6 +4,9 @@ from time import time, sleep
 
 import numpy as np
 import click
+import socket
+import threading
+import queue
 
 from cloudvolume.lib import Bbox, Vec, yellow
 
@@ -46,6 +49,8 @@ from .view import ViewOperator
 state = {'operators': {}}
 DEFAULT_CHUNK_NAME = 'chunk'
 
+q_msg = queue.Queue()
+q_cmd = queue.Queue()
 
 retry = tenacity.retry(
   reraise=True,
@@ -53,9 +58,41 @@ retry = tenacity.retry(
   wait=tenacity.wait_random_exponential(multiplier=0.5, max=60.0),
 )
 
+
 @retry
 def submit_task(queue, payload):
     queue.put(payload)
+
+
+def kombu_fetch_thread(queue_name, q_msg, q_cmd):
+    with Connection(queue_name, connect_timeout=60, heartbeat=120) as conn:
+        queue = conn.SimpleQueue("chunkflow")
+        msg = ""
+        state = "FETCH"
+        while True:
+            if state == "FETCH":
+                try:
+                    msg = queue.get_nowait()
+                except SimpleQueue.Empty:
+                    conn.heartbeat_check()
+                    sleep(60)
+                    continue
+                print("get message from the queue: {}".format(msg.payload))
+                q_msg.put(msg.payload)
+                state = "WAIT"
+            elif state == "WAIT":
+                if not q_cmd.empty():
+                    cmd = q_cmd.get()
+                    if cmd == "ack":
+                        msg.ack()
+                        state = "FETCH"
+                else:
+                    print("heart beat")
+                    try:
+                        conn.drain_events(timeout=10)
+                    except socket.timeout:
+                        conn.heartbeat_check()
+
 
 def get_initial_task():
     return {'skip': False, 'log': {'timer': {}}}
@@ -342,25 +379,27 @@ def fetch_task_kombu(queue_name, visibility_timeout, retry_times):
     """Fetch task from queue."""
     # This operator is actually a generator,
     # it replaces old tasks to a completely new tasks and loop over it!
-    waiting_period = 1
-    with Connection(queue_name, connect_timeout=60) as conn:
-        queue = conn.SimpleQueue("chunkflow")
-        while retry_times >= 0:
-            try:
-                msg = queue.get_nowait()
-            except SimpleQueue.Empty:
-                retry_times -= 1
-                sleep(waiting_period)
-                waiting_period = min(waiting_period*2, 60)
-                continue
-            print("get message from the queue: {}".format(msg.payload))
-            bbox = Bbox.from_filename(msg.payload)
-            task = get_initial_task()
-            task['queue'] = queue
-            task['task_handle'] = msg
-            task['bbox'] = bbox
-            task['log']['bbox'] = bbox.to_filename()
-            yield task
+    th=threading.Thread(target=kombu_fetch_thread, args=(queue_name, q_msg, q_cmd,))
+    th.daemon = True
+    th.start()
+    waiting_period = 30
+    while retry_times >= 0:
+        try:
+            msg = q_msg.get_nowait()
+        except queue.Empty:
+            retry_times -= 1
+            sleep(waiting_period)
+            waiting_period = min(waiting_period*2, 120)
+            continue
+
+        print("get message from the queue: {}".format(msg))
+        bbox = Bbox.from_filename(msg)
+        task = get_initial_task()
+        task['queue'] = q_cmd
+        task['task_handle'] = msg
+        task['bbox'] = bbox
+        task['log']['bbox'] = bbox.to_filename()
+        yield task
 
 
 @main.command('agglomerate')
@@ -647,9 +686,9 @@ def delete_task_in_queue_kombu(tasks, name):
         else:
             queue = task['queue']
             msg = task['task_handle']
-            msg.ack()
-            print('deleted task {} in queue: {}'.format(
-                msg.payload, queue))
+            queue.put("ack")
+            print('deleted task {} in queue'.format(
+                msg))
 
 
 @main.command('delete-chunk')
