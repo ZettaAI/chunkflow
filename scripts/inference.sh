@@ -12,9 +12,13 @@ export PYTHONPATH=/root/workspace/chunkflow/DeepEM:$PYTHONPATH
 export PYTHONPATH=/root/workspace/chunkflow/dataprovider3:$PYTHONPATH
 export PYTHONPATH=/root/workspace/chunkflow/pytorch-emvision:$PYTHONPATH
 
-chunkflow --mip ${AFF_MIP} \
+echo "Start inference"
+echo ${MASK_IMAGE}
+echo ${MASK_AFF}
+
+chunkflow --mip ${AFF_MIP} --verbose 0 \
     fetch-task-kombu -r 5 --queue-name=amqp://172.31.31.249:5672 \
-    cutout --mip ${IMAGE_MIP} --volume-path="$IMAGE_PATH" --expand-margin-size ${EXPAND_MARGIN_SIZE} ${FILL_MISSING} \
+    cutout --mip ${IMAGE_MIP} --volume-path="$IMAGE_PATH" --expand-margin-size ${EXPAND_MARGIN_SIZE} ${IMAGE_FILL_MISSING} \
     ${CONTRAST_NORMALIZATION} \
     ${MASK_IMAGE} \
     inference --name "aff-inference" \
@@ -22,10 +26,10 @@ chunkflow --mip ${AFF_MIP} \
         --convnet-weight-path=/root/workspace/chunkflow/model.chkpt \
         --dtype float32 \
         --num-output-channels 3 \
-        --input-patch-size 20 128 128 \
-        --output-patch-size 16 96 96 \
-        --output-patch-overlap 6 32 32 \
-        --output-crop-margin 6 32 32 \
+        --input-patch-size ${INPUT_PATCH_SIZE} \
+        --output-patch-size ${OUTPUT_PATCH_SIZE} \
+        --output-patch-overlap ${OUTPUT_PATCH_OVERLAP} \
+        --output-crop-margin ${OUTPUT_CROP_MARGIN} \
         --framework='pytorch' \
         --batch-size 1 \
         --patch-num ${PATCH_NUM} \
