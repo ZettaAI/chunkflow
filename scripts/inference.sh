@@ -3,7 +3,7 @@ python /root/workspace/chunkflow/scripts/setup_worker.py /run/variables/inferenc
 source /root/workspace/env.sh
 
 if [ -n "$PYTORCH_MODEL_PKG" ]; then
-    gsutil cp ${PYTORCH_MODEL_PKG} .
+    gsutil cp ${PYTORCH_MODEL_PKG} ./pytorch-model.tgz
     tar zxvf pytorch-model.tgz -C /root/workspace/chunkflow
     export PYTHONPATH=/root/workspace/chunkflow/pytorch-model:$PYTHONPATH
 fi
