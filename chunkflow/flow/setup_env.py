@@ -95,9 +95,6 @@ def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_pat
             if current_cost < cost:
                 cost = current_cost
                 patch_num = (pnz, pnxy, pnxy)
-    
-    ideal_size = [32,256,256]
-    cv_size = [closest_factor(block_size[i], ideal_size[i]) for i in range(3)]
 
     print('\n--input-patch-size ', tuple2string(input_patch_size))
     print('--output-patch-size ', tuple2string(output_patch_size))
@@ -125,7 +122,10 @@ def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_pat
     block_size = (output_chunk_size[0]//factor,
                   output_chunk_size[1]//block_factor,
                   output_chunk_size[2]//block_factor)
-    
+
+    ideal_size = [32,256,256]
+    cv_size = [closest_factor(block_size[i], ideal_size[i]) for i in range(3)]
+
     print('\n--input-chunk-size ' + tuple2string(input_chunk_size))
     print('--input-volume-start ' + tuple2string(input_chunk_start))
     print('--output-chunk-size ' + tuple2string(output_chunk_size))
