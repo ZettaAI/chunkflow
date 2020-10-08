@@ -20,7 +20,7 @@ def closest_factor(n, target):
     factors = list(reduce(list.__add__,
         ([i, n//i] for i in range(1, int(n**0.5) + 1) if n % i == 0)))
     factors.sort(key=lambda x: abs(target-x))
-    return factors[0]
+    return [x for x in factors if x >= 4][0]
 
 def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_path, 
               max_ram_size, output_patch_size, input_patch_size, channel_num, dtype, 
