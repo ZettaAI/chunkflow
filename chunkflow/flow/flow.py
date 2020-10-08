@@ -69,6 +69,7 @@ def kombu_fetch_thread(queue_name, q_msg, q_cmd):
         queue = conn.SimpleQueue("chunkflow")
         msg = ""
         state = "FETCH"
+        heartbeat_cycle = 0
         while True:
             if state == "FETCH":
                 try:
@@ -86,12 +87,17 @@ def kombu_fetch_thread(queue_name, q_msg, q_cmd):
                     if cmd == "ack":
                         msg.ack()
                         state = "FETCH"
+                    heartbeat_cycle = 0
                 else:
                     print("heart beat")
-                    try:
-                        conn.drain_events(timeout=10)
-                    except socket.timeout:
-                        conn.heartbeat_check()
+                    heartbeat_cycle += 1
+                    if heartbeat_cycle % 60 == 0:
+                        try:
+                            conn.drain_events(timeout=10)
+                        except socket.timeout:
+                            conn.heartbeat_check()
+                    else:
+                        sleep(1)
 
 
 def get_initial_task():
@@ -382,17 +388,21 @@ def fetch_task_kombu(queue_name, visibility_timeout, retry_times):
     th=threading.Thread(target=kombu_fetch_thread, args=(queue_name, q_msg, q_cmd,))
     th.daemon = True
     th.start()
-    waiting_period = 30
-    while retry_times >= 0:
+    waiting_period = 1
+    num_tries = 0
+    while num_tries <=retry_times:
         try:
             msg = q_msg.get_nowait()
         except queue.Empty:
-            retry_times -= 1
+            num_tries += 1
             sleep(waiting_period)
             waiting_period = min(waiting_period*2, 120)
+            print("queue empty, sleep for {} seconds".format(waiting_period))
             continue
 
         print("get message from the queue: {}".format(msg))
+        waiting_period = 1
+        num_tries = 0
         bbox = Bbox.from_filename(msg)
         task = get_initial_task()
         task['queue'] = q_cmd
