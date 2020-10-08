@@ -78,7 +78,7 @@ def kombu_fetch_thread(queue_name, q_msg, q_cmd):
                     conn.heartbeat_check()
                     sleep(60)
                     continue
-                print("get message from the queue: {}".format(msg.payload))
+                print("fetch message from the rabbitmq: {}".format(msg.payload))
                 q_msg.put(msg.payload)
                 state = "WAIT"
             elif state == "WAIT":
