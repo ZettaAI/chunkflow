@@ -1,5 +1,5 @@
 #!/bin/bash
-python /root/workspace/chunkflow/scripts/setup_worker.py /run/variables/inference_param > /root/workspace/env.sh
+python /root/workspace/chunkflow/scripts/setup_worker.py /root/.cloudvolume/secrets/inference_param > /root/workspace/env.sh
 source /root/workspace/env.sh
 
 if [ -n "$PYTORCH_MODEL_PKG" ]; then
