@@ -100,7 +100,7 @@ def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_pat
     print('--output-patch-size ', tuple2string(output_patch_size))
     print('--output-patch-overlap ', tuple2string(output_patch_overlap))
     print('--output-patch-stride ', tuple2string(patch_stride))
-    print('--patch-num ', patch_num)
+    print('patch number: ', patch_num)
 
     assert mip>=0
     block_mip = (mip + thumbnail_mip) // 2
@@ -129,7 +129,7 @@ def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_pat
     print('\n--input-chunk-size ' + tuple2string(input_chunk_size))
     print('--input-volume-start ' + tuple2string(input_chunk_start))
     print('--output-chunk-size ' + tuple2string(output_chunk_size))
-    print('cutout expand margin size ' + tuple2string(expand_margin_size))
+    print('cutout expand margin size:', expand_margin_size)
 
     print('output volume start: ' + tuple2string(volume_start))
     print('block size ' + tuple2string(block_size))
