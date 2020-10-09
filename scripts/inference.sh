@@ -26,12 +26,12 @@ chunkflow --mip ${OUTPUT_MIP} --verbose 0 \
         --convnet-model=/root/workspace/chunkflow/model.py \
         --convnet-weight-path=/root/workspace/chunkflow/model.chkpt \
         --dtype float32 \
-        --num-output-channels 3 \
+        --num-output-channels ${INFERENCE_OUTPUT_CHANNELS} \
         --input-patch-size ${INPUT_PATCH_SIZE} \
         --output-patch-size ${OUTPUT_PATCH_SIZE} \
         --output-patch-overlap ${OUTPUT_PATCH_OVERLAP} \
         --output-crop-margin ${OUTPUT_CROP_MARGIN} \
-        --framework='pytorch' \
+        --framework=${FRAMEWORK} \
         --batch-size 1 \
         --patch-num ${PATCH_NUM} \
     ${POSTPROC} \

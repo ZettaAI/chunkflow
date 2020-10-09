@@ -7,8 +7,9 @@ chunkflow setup-env -l ${OUTPUT_PATH} \
     --max-ram-size ${MAX_RAM} \
     --input-patch-size ${INPUT_PATCH_SIZE} \
     --output-patch-size ${OUTPUT_PATCH_SIZE} --output-patch-overlap ${OUTPUT_PATCH_OVERLAP} --crop-chunk-margin ${OUTPUT_CROP_MARGIN} \
-    --channel-num 3 \
+    --channel-num ${OUTPUT_CHANNELS} \
     -m ${OUTPUT_MIP} \
+    -d ${OUTPUT_DTYPE} \
     --thumbnail --thumbnail-mip 5 \
     --voxel-size ${IMAGE_RESOLUTION} \
     --max-mip ${MAX_MIP} \

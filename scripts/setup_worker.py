@@ -16,8 +16,12 @@ param["INPUT_PATCH_SIZE"] = " ".join(str(x) for x in input_patch_size[::-1])
 param["OUTPUT_PATCH_SIZE"] = " ".join(str(x) for x in output_patch_size[::-1])
 param["OUTPUT_PATCH_OVERLAP"] = " ".join(str(x) for x in output_patch_overlap[::-1])
 param["OUTPUT_CROP_MARGIN"] = " ".join(str(x) for x in output_chunk_margin[::-1])
+param["INFERENCE_OUTPUT_CHANNELS"] = 3 if "INFERENCE_OUTPUT_CHANNELS" not in param else param["INFERENCE_OUTPUT_CHANNELS"]
+param["FRAMEWORK"] = "pytorch" if "FRAMEWORK" not in param else param["FRAMEWORK"]
 
 envs = ["IMAGE_PATH", "IMAGE_MIP", "OUTPUT_PATH", "OUTPUT_MIP", "EXPAND_MARGIN_SIZE", "PATCH_NUM",
+        "INFERENCE_OUTPUT_CHANNELS",
+        "FRAMEWORK",
         "POSTPROC",
         "INPUT_PATCH_SIZE", "OUTPUT_PATCH_SIZE",
         "OUTPUT_PATCH_OVERLAP", "OUTPUT_CROP_MARGIN"]
