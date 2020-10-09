@@ -107,7 +107,12 @@ class SaveOperator(OperatorBase):
 
         # only use the last channel, it is the Z affinity
         # if this is affinitymap
-        image = chunk[-1, :, :, :]
+        assert chunk.ndim == 3 or chunk.ndim == 4
+        if chunk.ndim == 4:
+            image = chunk[-1, :, :, :]
+        elif chunk.ndim == 3:
+            image = chunk[:,:,:]
+
         if np.issubdtype(image.dtype, np.floating):
             image = (image * 255).astype(np.uint8)
         
