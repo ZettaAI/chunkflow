@@ -58,3 +58,6 @@ if param.get("OUTPUT_MASK_PATH", "N/A") != "N/A":
         operator += " --fill-missing"
     operator += " --maskout"
     print('export MASK_OUTPUT="{}"'.format(operator))
+
+if "MYELIN_MASK_THRESHOLD" in param:
+    print('export EXTRA_INFERENCE_PARAM="--mask-myelin-threshold {}"'.format(float(param["MYELIN_MASK_THRESHOLD"])))

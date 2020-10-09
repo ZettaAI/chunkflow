@@ -34,6 +34,7 @@ chunkflow --mip ${OUTPUT_MIP} --verbose 0 \
         --framework=${FRAMEWORK} \
         --batch-size 1 \
         --patch-num ${PATCH_NUM} \
+        ${EXTRA_INFERENCE_PARAM} \
     ${POSTPROC} \
     ${MASK_OUTPUT} \
     save --name "save-aff" \
