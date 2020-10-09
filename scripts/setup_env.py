@@ -5,7 +5,7 @@ import sys
 with open(sys.argv[1]) as f:
     param = json.load(f)
 
-target_mip = param["AFF_MIP"]
+target_mip = param["OUTPUT_MIP"]
 mip0_factor = [2**target_mip, 2**target_mip, 1]
 bbox = param["BBOX"]
 image_resolution = param["IMAGE_RESOLUTION"]
@@ -31,7 +31,7 @@ param["OUTPUT_PATCH_SIZE"] = " ".join(str(x) for x in output_patch_size[::-1])
 param["OUTPUT_PATCH_OVERLAP"] = " ".join(str(x) for x in output_patch_overlap[::-1])
 param["OUTPUT_CROP_MARGIN"] = " ".join(str(x) for x in output_chunk_margin[::-1])
 
-envs = ["VOL_START", "VOL_STOP", "AFF_PATH", "AFF_MIP", "IMAGE_RESOLUTION",
+envs = ["VOL_START", "VOL_STOP", "OUTPUT_PATH", "OUTPUT_MIP", "IMAGE_RESOLUTION",
         "MAX_RAM", "MAX_MIP", "INPUT_PATCH_SIZE", "OUTPUT_PATCH_SIZE",
         "OUTPUT_PATCH_OVERLAP", "OUTPUT_CROP_MARGIN"]
 

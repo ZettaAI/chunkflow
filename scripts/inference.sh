@@ -14,9 +14,9 @@ export PYTHONPATH=/root/workspace/chunkflow/pytorch-emvision:$PYTHONPATH
 
 echo "Start inference"
 echo ${MASK_IMAGE}
-echo ${MASK_AFF}
+echo ${MASK_OUTPUT}
 
-chunkflow --mip ${AFF_MIP} --verbose 0 \
+chunkflow --mip ${OUTPUT_MIP} --verbose 0 \
     fetch-task-kombu -r 5 --queue-name=amqp://172.31.31.249:5672 \
     cutout --mip ${IMAGE_MIP} --volume-path="$IMAGE_PATH" --expand-margin-size ${EXPAND_MARGIN_SIZE} ${IMAGE_FILL_MISSING} \
     ${CONTRAST_NORMALIZATION} \
@@ -33,8 +33,8 @@ chunkflow --mip ${AFF_MIP} --verbose 0 \
         --framework='pytorch' \
         --batch-size 1 \
         --patch-num ${PATCH_NUM} \
-    ${MASK_AFF} \
+    ${MASK_OUTPUT} \
     save --name "save-aff" \
-        --volume-path="$AFF_PATH" \
+        --volume-path="$OUTPUT_PATH" \
         --upload-log --create-thumbnail \
     delete-task-in-queue-kombu

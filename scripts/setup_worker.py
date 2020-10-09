@@ -17,7 +17,7 @@ param["OUTPUT_PATCH_SIZE"] = " ".join(str(x) for x in output_patch_size[::-1])
 param["OUTPUT_PATCH_OVERLAP"] = " ".join(str(x) for x in output_patch_overlap[::-1])
 param["OUTPUT_CROP_MARGIN"] = " ".join(str(x) for x in output_chunk_margin[::-1])
 
-envs = ["IMAGE_PATH", "IMAGE_MIP", "AFF_PATH", "AFF_MIP", "EXPAND_MARGIN_SIZE", "PATCH_NUM",
+envs = ["IMAGE_PATH", "IMAGE_MIP", "OUTPUT_PATH", "OUTPUT_MIP", "EXPAND_MARGIN_SIZE", "PATCH_NUM",
         "INPUT_PATCH_SIZE", "OUTPUT_PATCH_SIZE",
         "OUTPUT_PATCH_OVERLAP", "OUTPUT_CROP_MARGIN"]
 
@@ -45,11 +45,11 @@ if param.get("IMAGE_MASK_PATH", "N/A") != "N/A":
     operator += " --maskout --skip-to='save-aff'"
     print('export MASK_IMAGE="{}"'.format(operator))
 
-if param.get("AFF_MASK_PATH", "N/A") != "N/A":
-    operator = "mask --name=mask_aff --volume-path={} --mip {}".format(param["AFF_MASK_PATH"], param["AFF_MASK_MIP"])
-    if param.get("INVERT_AFF_MASK", True):
+if param.get("OUTPUT_MASK_PATH", "N/A") != "N/A":
+    operator = "mask --name=mask_aff --volume-path={} --mip {}".format(param["OUTPUT_MASK_PATH"], param["OUTPUT_MASK_MIP"])
+    if param.get("INVERT_OUTPUT_MASK", True):
         operator += " --inverse"
-    if param.get("AFF_MASK_FILL_MISSING", True):
+    if param.get("OUTPUT_MASK_FILL_MISSING", True):
         operator += " --fill-missing"
     operator += " --maskout"
-    print('export MASK_AFF="{}"'.format(operator))
+    print('export MASK_OUTPUT="{}"'.format(operator))
