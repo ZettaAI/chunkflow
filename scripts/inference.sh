@@ -15,6 +15,7 @@ export PYTHONPATH=/root/workspace/chunkflow/pytorch-emvision:$PYTHONPATH
 echo "Start inference"
 echo ${MASK_IMAGE}
 echo ${MASK_OUTPUT}
+echo ${POST_PROCESS}
 
 chunkflow --mip ${OUTPUT_MIP} --verbose 0 \
     fetch-task-kombu -r 5 --queue-name=amqp://172.31.31.249:5672 \
@@ -33,6 +34,7 @@ chunkflow --mip ${OUTPUT_MIP} --verbose 0 \
         --framework='pytorch' \
         --batch-size 1 \
         --patch-num ${PATCH_NUM} \
+    ${POSTPROC} \
     ${MASK_OUTPUT} \
     save --name "save-aff" \
         --volume-path="$OUTPUT_PATH" \

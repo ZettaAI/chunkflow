@@ -18,6 +18,7 @@ param["OUTPUT_PATCH_OVERLAP"] = " ".join(str(x) for x in output_patch_overlap[::
 param["OUTPUT_CROP_MARGIN"] = " ".join(str(x) for x in output_chunk_margin[::-1])
 
 envs = ["IMAGE_PATH", "IMAGE_MIP", "OUTPUT_PATH", "OUTPUT_MIP", "EXPAND_MARGIN_SIZE", "PATCH_NUM",
+        "POSTPROC",
         "INPUT_PATCH_SIZE", "OUTPUT_PATCH_SIZE",
         "OUTPUT_PATCH_OVERLAP", "OUTPUT_CROP_MARGIN"]
 
