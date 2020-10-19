@@ -59,5 +59,8 @@ if param.get("OUTPUT_MASK_PATH", "N/A") != "N/A":
     operator += " --maskout"
     print('export MASK_OUTPUT="{}"'.format(operator))
 
-if "MYELIN_MASK_THRESHOLD" in param:
+if param.get("MYELIN_MASK_THRESHOLD", "N/A") != "N/A":
     print('export EXTRA_INFERENCE_PARAM="--mask-myelin-threshold {}"'.format(float(param["MYELIN_MASK_THRESHOLD"])))
+
+if param.get("POSTPROC", "N/A") != "N/A":
+        print('export POSTPROC="{}"'.format(param["POSTPROC"]))
