@@ -1,10 +1,11 @@
 #!/bin/bash
 python /root/workspace/chunkflow/scripts/setup_worker.py /root/.cloudvolume/secrets/inference_param > /root/workspace/env.sh
+source /root/workspace/chunkflow/scripts/init.sh
 source /root/workspace/env.sh
 
 if [ -n "$PYTORCH_MODEL_PKG" ]; then
-    gsutil cp ${PYTORCH_MODEL_PKG} ./pytorch-model.tgz
-    tar zxvf pytorch-model.tgz -C /root/workspace/chunkflow
+    try gsutil cp ${PYTORCH_MODEL_PKG} ./pytorch-model.tgz
+    try tar zxvf pytorch-model.tgz -C /root/workspace/chunkflow
     export PYTHONPATH=/root/workspace/chunkflow/pytorch-model:$PYTHONPATH
 fi
 
