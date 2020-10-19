@@ -32,7 +32,7 @@ chunkflow --mip ${OUTPUT_MIP} --verbose 0 \
         --output-patch-size ${OUTPUT_PATCH_SIZE} \
         --output-patch-overlap ${OUTPUT_PATCH_OVERLAP} \
         --output-crop-margin ${OUTPUT_CROP_MARGIN} \
-        --framework=${FRAMEWORK} \
+        --framework=${INFERENCE_FRAMEWORK} \
         --batch-size 1 \
         --patch-num ${PATCH_NUM} \
         ${EXTRA_INFERENCE_PARAM} \
