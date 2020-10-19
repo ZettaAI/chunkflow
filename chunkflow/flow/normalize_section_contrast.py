@@ -55,9 +55,12 @@ class NormalizeSectionContrastOperator(OperatorBase):
         assert chunk.dtype is np.dtype(np.uint8)
         
         for z in range(chunk.bbox.minpt[-3], chunk.bbox.maxpt[-3]):
-            lookup_table = self.fetch_lookup_table(z)
             slices = (slice(z, z+1), *chunk.slices[-2:])
             image = chunk.cutout(slices)
+            if image == 0:
+                print("skip normalization for empty slice ", z)
+                continue
+            lookup_table = self.fetch_lookup_table(z)
             image_voxel_offset = image.voxel_offset
             image = lookup_table[image]
             image = Chunk(image, voxel_offset=image_voxel_offset)
