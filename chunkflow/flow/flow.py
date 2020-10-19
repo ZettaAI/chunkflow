@@ -76,7 +76,7 @@ def kombu_fetch_thread(queue_name, q_msg, q_cmd):
                     msg = queue.get_nowait()
                 except SimpleQueue.Empty:
                     conn.heartbeat_check()
-                    sleep(60)
+                    sleep(10)
                     continue
                 print("fetch message from the rabbitmq: {}".format(msg.payload))
                 q_msg.put(msg.payload)
