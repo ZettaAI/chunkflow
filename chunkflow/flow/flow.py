@@ -89,7 +89,6 @@ def kombu_fetch_thread(queue_name, q_msg, q_cmd):
                         state = "FETCH"
                     heartbeat_cycle = 0
                 else:
-                    print("heart beat")
                     heartbeat_cycle += 1
                     if heartbeat_cycle % 60 == 0:
                         try:
