@@ -40,3 +40,6 @@ envs = ["VOL_START", "VOL_STOP", "OUTPUT_PATH", "OUTPUT_MIP", "IMAGE_RESOLUTION"
 
 for e in envs:
     print('export {}="{}"'.format(e, param[e]))
+
+if "PYTORCH_MODEL_PATH" in param:
+    print('export PYTORCH_MODEL_PKG="{}"'.format(os.path.join(param["PYTORCH_MODEL_PATH"])))
