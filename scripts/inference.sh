@@ -16,6 +16,7 @@ export PYTHONPATH=/root/workspace/chunkflow/pytorch-emvision:$PYTHONPATH
 echo "Start inference"
 echo ${MASK_IMAGE}
 echo ${MASK_OUTPUT}
+echo ${CONTRAST_NORMALIZATION}
 echo ${POST_PROCESS}
 
 chunkflow --mip ${OUTPUT_MIP} --verbose 0 \

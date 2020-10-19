@@ -36,10 +36,10 @@ if param.get("IMAGE_FILL_MISSING", False):
 if "PYTORCH_MODEL_PATH" in param:
     print('export PYTORCH_MODEL_PKG="{}"'.format(os.path.join(param["PYTORCH_MODEL_PATH"])))
 
-if "IMAGE_HISTOGRAM_PATH" in param:
-    upper_threshold = param.get("CONTRAST_NORMALIZATION_UPPER_THRESHOLD", 0.01)
+if param.get("IMAGE_HISTOGRAM_PATH", "N/A") != "N/A":
+    upper_threshold = 1 - param.get("CONTRAST_NORMALIZATION_UPPER_THRESHOLD", 0.99)
     lower_threshold = param.get("CONTRAST_NORMALIZATION_LOWER_THRESHOLD", 0.01)
-    print('export CONSTRAST_NORMALIZATION="normalize-section-contrast -p {} -l {} -u {}"'.format(param["IMAGE_HISTOGRAM_PATH"], lower_threshold, upper_threshold))
+    print('export CONTRAST_NORMALIZATION="normalize-contrast-nkem -p {} -l {} -u {}"'.format(param["IMAGE_HISTOGRAM_PATH"], lower_threshold, upper_threshold))
 
 if param.get("IMAGE_MASK_PATH", "N/A") != "N/A":
     operator = "mask --name=mask_image --volume-path={} --mip {}".format(param["IMAGE_MASK_PATH"], param["IMAGE_MASK_MIP"])
