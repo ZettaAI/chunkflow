@@ -341,7 +341,7 @@ class Inferencer(object):
             print('input is all zero, return zero buffer directly')
             if self.mask_myelin_threshold:
                 assert output_buffer.shape[0] == 4
-                return output_buffer[:-1, ...]
+                return Chunk(output_buffer[:-1, ...], voxel_offset=output_buffer.voxel_offset)
             else:
                 return output_buffer
         
