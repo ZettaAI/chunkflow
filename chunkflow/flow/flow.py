@@ -65,7 +65,7 @@ def submit_task(queue, payload):
 
 
 def kombu_fetch_thread(queue_name, q_msg, q_cmd):
-    with Connection(queue_name, connect_timeout=60, heartbeat=120) as conn:
+    with Connection(queue_name, connect_timeout=60, heartbeat=600) as conn:
         queue = conn.SimpleQueue("chunkflow")
         msg = ""
         state = "FETCH"
