@@ -9,6 +9,10 @@ if [ -n "$PYTORCH_MODEL_PKG" ]; then
     export PYTHONPATH=/root/workspace/chunkflow/pytorch-model:$PYTHONPATH
 fi
 
+if [ -n "$ONNX_MODEL_PATH" ]; then
+    try gsutil cp ${ONNX_MODEL_PATH} /root/workspace/chunkflow/model.chkpt
+fi
+
 chunkflow setup-env -l ${OUTPUT_PATH} \
     --volume-start ${VOL_START} --volume-stop ${VOL_STOP} \
     --max-ram-size ${MAX_RAM} \

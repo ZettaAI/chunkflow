@@ -9,6 +9,10 @@ if [ -n "$PYTORCH_MODEL_PKG" ]; then
     export PYTHONPATH=/root/workspace/chunkflow/pytorch-model:$PYTHONPATH
 fi
 
+if [ -n "$ONNX_MODEL_PATH" ]; then
+    try gsutil cp ${ONNX_MODEL_PATH} /root/workspace/chunkflow/model.chkpt
+fi
+
 export PYTHONPATH=/root/workspace/chunkflow/DeepEM:$PYTHONPATH
 export PYTHONPATH=/root/workspace/chunkflow/dataprovider3:$PYTHONPATH
 export PYTHONPATH=/root/workspace/chunkflow/pytorch-emvision:$PYTHONPATH
@@ -25,7 +29,7 @@ chunkflow --mip ${OUTPUT_MIP} --verbose 0 \
     ${CONTRAST_NORMALIZATION} \
     ${MASK_IMAGE} \
     inference --name "aff-inference" \
-        --convnet-model=/root/workspace/chunkflow/model.py \
+        --convnet-model=${CONVNET_MODEL} \
         --convnet-weight-path=/root/workspace/chunkflow/model.chkpt \
         --dtype float32 \
         --num-output-channels ${INFERENCE_OUTPUT_CHANNELS} \

@@ -17,7 +17,11 @@ param["OUTPUT_PATCH_SIZE"] = " ".join(str(x) for x in output_patch_size[::-1])
 param["OUTPUT_PATCH_OVERLAP"] = " ".join(str(x) for x in output_patch_overlap[::-1])
 param["OUTPUT_CROP_MARGIN"] = " ".join(str(x) for x in output_chunk_margin[::-1])
 param["INFERENCE_OUTPUT_CHANNELS"] = 3 if "INFERENCE_OUTPUT_CHANNELS" not in param else param["INFERENCE_OUTPUT_CHANNELS"]
-param["INFERENCE_FRAMEWORK"] = "pytorch" if "INFERENCE_FRAMEWORK" not in param else param["INFERENCE_FRAMEWORK"]
+if "INFERENCE_FRAMEWORK" not in param:
+    if "ONNX_MODEL_PATH" in param:
+        param["INFERENCE_FRAMEWORK"] = "universal"
+    else:
+        param["INFERENCE_FRAMEWORK"] = "pytorch"
 
 envs = ["IMAGE_PATH", "IMAGE_MIP", "OUTPUT_PATH", "OUTPUT_MIP", "EXPAND_MARGIN_SIZE", "PATCH_NUM",
         "INFERENCE_OUTPUT_CHANNELS",
@@ -33,8 +37,18 @@ for e in envs:
 if param.get("IMAGE_FILL_MISSING", False):
     print('export IMAGE_FILL_MISSING="--fill-missing"')
 
-if "PYTORCH_MODEL_PATH" in param:
+
+if "ONNX_MODEL_PATH" in param:
+    print('export ONNX_MODEL_PATH="{}"'.format(os.path.join(param["ONNX_MODEL_PATH"])))
+    print('export CONVNET_MODEL="/root/workspace/chunkflow/scripts/model_onnx.py"')
+    if param.get("ENABLE_FP16", False):
+        print('export ENABLE_FP16="1"')
+elif "PYTORCH_MODEL_PATH" in param:
     print('export PYTORCH_MODEL_PKG="{}"'.format(os.path.join(param["PYTORCH_MODEL_PATH"])))
+    print('export CONVNET_MODEL="/root/workspace/chunkflow/model.py"')
+else:
+    print('export CONVNET_MODEL="/root/workspace/chunkflow/model.py"')
+
 
 if param.get("IMAGE_HISTOGRAM_PATH", "N/A") != "N/A":
     upper_threshold = 1 - param.get("CONTRAST_NORMALIZATION_UPPER_THRESHOLD", 0.99)
