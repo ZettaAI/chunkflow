@@ -423,7 +423,7 @@ class Inferencer(object):
         
         # theoretically, all the value of output_buffer should not be greater than 1
         # we use a slightly higher value here to accomondate numerical precision issue
-        np.testing.assert_array_less(output_buffer, 1.0001,
+        np.testing.assert_array_less(output_buffer, 1.00011,
             err_msg='output buffer should not be greater than 1')
 
         if self.mask_myelin_threshold:
