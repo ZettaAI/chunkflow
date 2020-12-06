@@ -7,10 +7,10 @@ with open(sys.argv[1]) as f:
 
 input_patch_size = param.get("INPUT_PATCH_SIZE",[256, 256, 20])
 output_patch_size = param.get("OUTPUT_PATCH_SIZE", input_patch_size)
-overlap = param.get("PATCH_OVERLAP", 0.5)
 
-output_patch_overlap = [ int(x*overlap) + int(x*overlap)%2 for x in input_patch_size ]
-output_chunk_margin = param.get("CHUNK_CROP_MARGIN", output_patch_overlap)
+output_patch_overlap = param.get("OUTPUT_PATCH_OVERLAP", [ 128, 128, 10 ])
+output_chunk_margin = param.get("CHUNK_CROP_MARGIN", [ 128, 128, 10 ])
+
 
 param["INPUT_PATCH_SIZE"] = " ".join(str(x) for x in input_patch_size[::-1])
 param["OUTPUT_PATCH_SIZE"] = " ".join(str(x) for x in output_patch_size[::-1])
