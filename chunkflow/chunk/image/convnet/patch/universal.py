@@ -58,7 +58,8 @@ class Universal(PatchInferencerBase):
         # make sure that the patch is 5d ndarray
         input_patch = self._reshape_patch_to_5d(input_patch)
         output_patch = self.patch_inferencer( input_patch )
-        output_patch = self._crop_output_patch(output_patch)
+        if not getattr(self.patch_inferencer, 'cropped_output', False):
+            output_patch = self._crop_output_patch(output_patch)
         output_patch *= self.output_patch_mask
         assert isinstance(output_patch, np.ndarray)
         return output_patch
