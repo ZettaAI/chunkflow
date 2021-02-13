@@ -29,8 +29,8 @@ param["INPUT_PATCH_SIZE"] = " ".join(str(x) for x in input_patch_size[::-1])
 param["OUTPUT_PATCH_SIZE"] = " ".join(str(x) for x in output_patch_size[::-1])
 param["OUTPUT_PATCH_OVERLAP"] = " ".join(str(x) for x in output_patch_overlap[::-1])
 param["OUTPUT_CROP_MARGIN"] = " ".join(str(x) for x in output_chunk_margin[::-1])
-param["OUTPUT_CHANNELS"] = 3 if "OUTPUT_CHANNELS" not in param else param["OUTPUT_CHANNELS"]
-param["OUTPUT_DTYPE"] = "float32" if "OUTPUT_DTYPE" not in param else param["OUTPUT_DTYPE"]
+param["OUTPUT_CHANNELS"] = param.get("OUTPUT_CHANNELS", 3)
+param["OUTPUT_DTYPE"] = param.get("OUTPUT_DTYPE", "float32")
 
 envs = ["VOL_START", "VOL_STOP", "OUTPUT_PATH", "OUTPUT_MIP", "IMAGE_RESOLUTION",
         "OUTPUT_CHANNELS", "OUTPUT_DTYPE",
