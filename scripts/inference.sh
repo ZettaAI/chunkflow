@@ -19,6 +19,8 @@ export PYTHONPATH=/root/workspace/chunkflow/pytorch-emvision:$PYTHONPATH
 
 echo "Start inference"
 echo ${MASK_IMAGE}
+echo ${CROP_IMAGE}
+echo ${SAVE_IMAGE}
 echo ${MASK_OUTPUT}
 echo ${CONTRAST_NORMALIZATION}
 echo ${POST_PROCESS}
@@ -28,6 +30,8 @@ chunkflow --mip ${OUTPUT_MIP} --verbose 0 \
     cutout --mip ${IMAGE_MIP} --volume-path="$IMAGE_PATH" --expand-margin-size ${EXPAND_MARGIN_SIZE} ${IMAGE_FILL_MISSING} \
     ${CONTRAST_NORMALIZATION} \
     ${MASK_IMAGE} \
+    ${CROP_IMAGE} \
+    ${SAVE_IMAGE} \
     inference --name "aff-inference" \
         --convnet-model=${CONVNET_MODEL} \
         --convnet-weight-path=/root/workspace/chunkflow/model.chkpt \

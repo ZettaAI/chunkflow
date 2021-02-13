@@ -144,11 +144,14 @@ def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_pat
         storage = SimpleStorage(layer_path)
         thumbnail_layer_path = os.path.join(layer_path, 'thumbnail')
         thumbnail_storage = SimpleStorage(thumbnail_layer_path)
+        input_image_layer_path = os.path.join(layer_path, 'input_image')
+        input_image_storage = SimpleStorage(input_image_layer_path)
 
         if not overwrite_info:
             print('\ncheck that we are not overwriting existing info file.')
             assert not storage.exists('info')
             assert not thumbnail_storage.exists('info')
+            assert not input_image_storage.exists('info')
 
         print('create and upload info file to ', layer_path)
         # Note that cloudvolume use fortran order rather than C order
@@ -162,7 +165,17 @@ def setup_environment(dry_run, volume_start, volume_stop, volume_size, layer_pat
                                            max_mip=mip)
         vol = CloudVolume(layer_path, info=info)
         vol.commit_info()
-      
+
+        input_image_info = CloudVolume.create_new_info(1, layer_type='image',
+                                           data_type='uint8',
+                                           encoding=encoding,
+                                           resolution=voxel_size[::-1],
+                                           voxel_offset=volume_start[::-1],
+                                           volume_size=volume_size[::-1],
+                                           chunk_size=cv_size[::-1],
+                                           max_mip=mip)
+        input_image_vol = CloudVolume(input_image_layer_path, info=input_image_info)
+        input_image_vol.commit_info()
         thumbnail_factor = 2**thumbnail_mip
         thumbnail_block_size = (output_chunk_size[0]//factor,
                                 output_chunk_size[1]//thumbnail_factor,

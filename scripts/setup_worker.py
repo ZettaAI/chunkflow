@@ -64,6 +64,12 @@ if param.get("IMAGE_MASK_PATH", "N/A") != "N/A":
     operator += " --maskout --skip-to='save-aff'"
     print('export MASK_IMAGE="{}"'.format(operator))
 
+if param.get("SAVE_INPUT_IMAGE", False):
+    crop_operator = "crop-margin -o cropped-image --margin-size {}".format(param["EXPAND_MARGIN_SIZE"])
+    save_operator = "save -i cropped-image --volume-path={}".format(os.path.join(param["OUTPUT_PATH"], "input_image"))
+    print('export CROP_IMAGE="{}"'.format(crop_operator))
+    print('export SAVE_IMAGE="{}"'.format(save_operator))
+
 if param.get("OUTPUT_MASK_PATH", "N/A") != "N/A":
     operator = "mask --name=mask_aff --volume-path={} --mip {}".format(param["OUTPUT_MASK_PATH"], param["OUTPUT_MASK_MIP"])
     if param.get("INVERT_OUTPUT_MASK", True):
