@@ -423,8 +423,9 @@ class Inferencer(object):
         
         # theoretically, all the value of output_buffer should not be greater than 1
         # we use a slightly higher value here to accomondate numerical precision issue
-        np.testing.assert_array_less(output_buffer, 1.00011,
-            err_msg='output buffer should not be greater than 1')
+        #np.testing.assert_array_less(output_buffer, 1.001,
+        #    err_msg='output buffer should not be greater than 1')
+        print("max element:", np.max(output_buffer))
 
         if self.mask_myelin_threshold:
             # currently only for masking out affinity map 
