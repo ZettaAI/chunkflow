@@ -1425,6 +1425,35 @@ def threshold(tasks, name, input_chunk_name, output_chunk_name,
         yield task
 
 
+@main.command('to-int')
+@click.option('--name', type=str, default='toint',
+              help='convert and scale float32 chunk to int.')
+@click.option('--input-chunk-name', '-i',
+              type=str, default=DEFAULT_CHUNK_NAME,
+              help='input chunk name')
+@click.option('--output-chunk-name', '-o',
+              type=str, default=DEFAULT_CHUNK_NAME,
+              help='output chunk name')
+@click.option('--dtype', '-d', type=click.Choice(['uint8', 'int8', 'uint16', 'int16']),
+              default='uint8', help='output integer type.')
+@click.option('--scale/--no-scale',
+              default=True,
+              help='scale the float number from [0, 1]. default is True.')
+@operator
+def to_int(tasks, name, input_chunk_name, output_chunk_name,
+              dtype, scale):
+    """Threshold the probability map."""
+    for task in tasks:
+        handle_task_skip(task, name)
+        if not task['skip']:
+            start = time()
+            if state['verbose']:
+                print(f'Convert float32 to {dtype}...')
+            task[output_chunk_name] = task[input_chunk_name].to_int(dtype, scale)
+            task['log']['timer'][name] = time() - start
+        yield task
+
+
 @main.command('channel-voting')
 @click.option('--name', type=str, default='channel-voting', help='name of operator')
 @click.option('--input-chunk-name', type=str, default=DEFAULT_CHUNK_NAME)

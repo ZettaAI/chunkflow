@@ -328,6 +328,19 @@ class Chunk(NDArrayOperatorsMixin):
         out += 1
         return Chunk(out, voxel_offset=self.voxel_offset[1:])
 
+    def to_int(self, dtype: str = 'uint8', scale: bool = True) -> np.ndarray:
+        assert self.array.dtype==np.float32
+        assert self.array.ndim == 4
+        dt = np.dtype(dtype)
+        assert np.issubdtype(dt, np.integer)
+        if scale:
+            info = np.iinfo(dt)
+            print(info.min, info.max)
+            out = self.array*(info.max - info.min) + info.min
+            return Chunk(out.astype(dt), voxel_offset=self.voxel_offset)
+        else:
+            return Chunk(self.array.astype(dt), voxel_offset=self.voxel_offset)
+
     def mask_using_last_channel(self, threshold: float = 0.3) -> np.ndarray:
         mask = (self.array[-1, :, :, :] < threshold)
         ret = self.array[:-1, ...]
