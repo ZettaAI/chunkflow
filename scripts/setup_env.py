@@ -44,3 +44,6 @@ for e in envs:
 
 if "PYTORCH_MODEL_PATH" in param:
     print('export PYTORCH_MODEL_PKG="{}"'.format(os.path.join(param["PYTORCH_MODEL_PATH"])))
+
+if "ONNX_MODEL_PATH" in param:
+    print('export ONNX_MODEL_PKG="{}"'.format(os.path.join(param["ONNX_MODEL_PATH"])))
