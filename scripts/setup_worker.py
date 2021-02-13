@@ -37,12 +37,12 @@ for e in envs:
 if param.get("IMAGE_FILL_MISSING", False):
     print('export IMAGE_FILL_MISSING="--fill-missing"')
 
+if param.get("ENABLE_FP16", False):
+    print('export ENABLE_FP16="1"')
 
 if "ONNX_MODEL_PATH" in param:
     print('export ONNX_MODEL_PATH="{}"'.format(os.path.join(param["ONNX_MODEL_PATH"])))
     print('export CONVNET_MODEL="/root/workspace/chunkflow/scripts/model_onnx.py"')
-    if param.get("ENABLE_FP16", False):
-        print('export ENABLE_FP16="1"')
 elif "PYTORCH_MODEL_PATH" in param:
     print('export PYTORCH_MODEL_PKG="{}"'.format(os.path.join(param["PYTORCH_MODEL_PATH"])))
     print('export CONVNET_MODEL="/root/workspace/chunkflow/model.py"')
