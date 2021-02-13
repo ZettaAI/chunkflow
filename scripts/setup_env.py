@@ -32,10 +32,12 @@ param["OUTPUT_CROP_MARGIN"] = " ".join(str(x) for x in output_chunk_margin[::-1]
 param["OUTPUT_CHANNELS"] = param.get("OUTPUT_CHANNELS", 3)
 param["OUTPUT_DTYPE"] = param.get("OUTPUT_DTYPE", "float32")
 
+param["OUTPUT_ENCODING"] = param.get("OUTPUT_ENCODING", "raw")
+
 envs = ["VOL_START", "VOL_STOP", "OUTPUT_PATH", "OUTPUT_MIP", "IMAGE_RESOLUTION",
         "OUTPUT_CHANNELS", "OUTPUT_DTYPE",
         "MAX_RAM", "MAX_MIP", "INPUT_PATCH_SIZE", "OUTPUT_PATCH_SIZE",
-        "OUTPUT_PATCH_OVERLAP", "OUTPUT_CROP_MARGIN"]
+        "OUTPUT_PATCH_OVERLAP", "OUTPUT_CROP_MARGIN", "OUTPUT_ENCODING"]
 
 for e in envs:
     print('export {}="{}"'.format(e, param[e]))

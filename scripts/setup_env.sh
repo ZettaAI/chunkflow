@@ -22,6 +22,7 @@ chunkflow setup-env -l ${OUTPUT_PATH} \
     -m ${OUTPUT_MIP} \
     -d ${OUTPUT_DTYPE} \
     --thumbnail --thumbnail-mip 5 \
+    -e ${OUTPUT_ENCODING} \
     --voxel-size ${IMAGE_RESOLUTION} \
     --max-mip ${MAX_MIP} \
     -q amqp://172.31.31.249:5672
