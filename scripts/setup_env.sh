@@ -5,7 +5,7 @@ source /root/workspace/env.sh
 
 if [ -n "$PYTORCH_MODEL_PKG" ]; then
     try gsutil cp ${PYTORCH_MODEL_PKG} ./pytorch-model.tgz
-    try tar zxvf pytorch-model.tgz -C /root/workspace/chunkflow
+    try tar zxf pytorch-model.tgz -C /root/workspace/chunkflow
     export PYTHONPATH=/root/workspace/chunkflow/pytorch-model:$PYTHONPATH
 fi
 
