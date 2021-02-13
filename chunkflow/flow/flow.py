@@ -285,11 +285,17 @@ def setup_env(volume_start, volume_stop, volume_size, layer_path,
               queue_name, visibility_timeout, thumbnail, encoding, voxel_size, 
               overwrite_info):
 
+    if all(x.is_integer() for x in voxel_size):
+        new_voxel_size = [int(x) for x in voxel_size]
+        print("Integer voxel size: ", new_voxel_size)
+    else:
+        new_voxel_size = voxel_size[:]
+
     bboxes = setup_environment(
         state['dry_run'], volume_start, volume_stop, volume_size, layer_path, 
         max_ram_size, output_patch_size, input_patch_size, channel_num, dtype, 
         output_patch_overlap, crop_chunk_margin, mip, thumbnail_mip, max_mip,
-        queue_name, visibility_timeout, thumbnail, encoding, voxel_size, 
+        queue_name, visibility_timeout, thumbnail, encoding, new_voxel_size,
         overwrite_info, state['verbose'])
  
     if queue_name is not None and not state['dry_run']:
