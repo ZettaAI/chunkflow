@@ -432,6 +432,8 @@ class Chunk(NDArrayOperatorsMixin):
             slice(max(s.start - o, 0), min(s.stop - o, h)) for s, o, h in 
             zip(patch.slices, self.voxel_offset, self.shape)
         )
+        if any(s.stop < 0 for s in internal_slices):
+            return
         shape = (s.stop - s.start for s in internal_slices)
         patch_starts = (
             i.start - s.start + o for s, o, i in 
