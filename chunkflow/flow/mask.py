@@ -137,7 +137,8 @@ class MaskOperator(OperatorBase):
         mask = mask.astype(np.bool)
         mask = np.asarray(mask)
         mask = np.transpose(mask)
-        mask = np.squeeze(mask, axis=0)
+        if mask.shape[0] == 1:
+            mask = np.squeeze(mask, axis=0)
 
         if self.inverse:
             mask = (mask == 0)
