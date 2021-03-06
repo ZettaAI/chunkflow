@@ -42,12 +42,12 @@ if param.get("ENABLE_FP16", False):
 
 if "ONNX_MODEL_PATH" in param:
     print('export ONNX_MODEL_PATH="{}"'.format(os.path.join(param["ONNX_MODEL_PATH"])))
-    print('export CONVNET_MODEL="/root/workspace/chunkflow/scripts/model_onnx.py"')
+    print('export CONVNET_MODEL="/workspace/chunkflow/scripts/model_onnx.py"')
 elif "PYTORCH_MODEL_PATH" in param:
     print('export PYTORCH_MODEL_PKG="{}"'.format(os.path.join(param["PYTORCH_MODEL_PATH"])))
-    print('export CONVNET_MODEL="/root/workspace/chunkflow/model.py"')
+    print('export CONVNET_MODEL="/workspace/chunkflow/model.py"')
 else:
-    print('export CONVNET_MODEL="/root/workspace/chunkflow/model.py"')
+    print('export CONVNET_MODEL="/workspace/chunkflow/model.py"')
 
 
 if param.get("IMAGE_HISTOGRAM_PATH", "N/A") != "N/A":

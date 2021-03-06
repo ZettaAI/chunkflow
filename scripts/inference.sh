@@ -1,21 +1,21 @@
 #!/bin/bash
-python /root/workspace/chunkflow/scripts/setup_worker.py /root/.cloudvolume/secrets/inference_param > /root/workspace/env.sh
-source /root/workspace/chunkflow/scripts/init.sh
-source /root/workspace/env.sh
+python /workspace/chunkflow/scripts/setup_worker.py /run/secrets/inference_param > /workspace/chunkflow/env.sh
+source /workspace/chunkflow/scripts/init.sh
+source /workspace/chunkflow/env.sh
 
 if [ -n "$PYTORCH_MODEL_PKG" ]; then
     try gsutil cp ${PYTORCH_MODEL_PKG} ./pytorch-model.tgz
-    try tar zxvf pytorch-model.tgz -C /root/workspace/chunkflow
-    export PYTHONPATH=/root/workspace/chunkflow/pytorch-model:$PYTHONPATH
+    try tar zxvf pytorch-model.tgz -C /workspace/chunkflow
+    export PYTHONPATH=/workspace/chunkflow/pytorch-model:$PYTHONPATH
 fi
 
 if [ -n "$ONNX_MODEL_PATH" ]; then
-    try gsutil cp ${ONNX_MODEL_PATH} /root/workspace/chunkflow/model.chkpt
+    try gsutil cp ${ONNX_MODEL_PATH} /workspace/chunkflow/model.chkpt
 fi
 
-export PYTHONPATH=/root/workspace/chunkflow/DeepEM:$PYTHONPATH
-export PYTHONPATH=/root/workspace/chunkflow/dataprovider3:$PYTHONPATH
-export PYTHONPATH=/root/workspace/chunkflow/pytorch-emvision:$PYTHONPATH
+export PYTHONPATH=/workspace/chunkflow/DeepEM:$PYTHONPATH
+export PYTHONPATH=/workspace/chunkflow/dataprovider3:$PYTHONPATH
+export PYTHONPATH=/workspace/chunkflow/pytorch-emvision:$PYTHONPATH
 
 echo "Start inference"
 echo ${MASK_IMAGE}
@@ -34,7 +34,7 @@ chunkflow --mip ${OUTPUT_MIP} --verbose 0 \
     ${SAVE_IMAGE} \
     inference --name "aff-inference" \
         --convnet-model=${CONVNET_MODEL} \
-        --convnet-weight-path=/root/workspace/chunkflow/model.chkpt \
+        --convnet-weight-path=/workspace/chunkflow/model.chkpt \
         --dtype float32 \
         --num-output-channels ${INFERENCE_OUTPUT_CHANNELS} \
         --input-patch-size ${INPUT_PATCH_SIZE} \

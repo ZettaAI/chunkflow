@@ -1,16 +1,16 @@
 #!/bin/bash
-python /root/workspace/chunkflow/scripts/setup_env.py /root/.cloudvolume/secrets/inference_param > /root/workspace/env.sh
-source /root/workspace/chunkflow/scripts/init.sh
-source /root/workspace/env.sh
+python /workspace/chunkflow/scripts/setup_env.py /run/secrets/inference_param > /workspace/chunkflow/env.sh
+source /workspace/chunkflow/scripts/init.sh
+source /workspace/chunkflow/env.sh
 
 if [ -n "$PYTORCH_MODEL_PKG" ]; then
     try gsutil cp ${PYTORCH_MODEL_PKG} ./pytorch-model.tgz
-    try tar zxf pytorch-model.tgz -C /root/workspace/chunkflow
-    export PYTHONPATH=/root/workspace/chunkflow/pytorch-model:$PYTHONPATH
+    try tar zxf pytorch-model.tgz -C /workspace/chunkflow
+    export PYTHONPATH=/workspace/chunkflow/pytorch-model:$PYTHONPATH
 fi
 
 if [ -n "$ONNX_MODEL_PATH" ]; then
-    try gsutil cp ${ONNX_MODEL_PATH} /root/workspace/chunkflow/model.chkpt
+    try gsutil cp ${ONNX_MODEL_PATH} /workspace/chunkflow/model.chkpt
 fi
 
 chunkflow setup-env -l ${OUTPUT_PATH} \
