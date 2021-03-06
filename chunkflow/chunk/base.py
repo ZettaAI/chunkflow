@@ -454,6 +454,9 @@ class Chunk(NDArrayOperatorsMixin):
         )
         patch_slices = tuple(slice(s, s+h) for s, h in zip(patch_starts, shape))
 
+        if any((s.stop - s.start) <= 0 for s in patch_slices):
+            return
+
         self.array[internal_slices] += patch.array[patch_slices]
 
     def _get_overlap_slices(self, other_slices):
