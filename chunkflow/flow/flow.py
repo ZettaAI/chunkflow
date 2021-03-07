@@ -395,15 +395,18 @@ def fetch_task_kombu(queue_name, visibility_timeout, retry_times):
     th.start()
     waiting_period = 1
     num_tries = 0
-    while num_tries <=retry_times:
+    while True:
         try:
             msg = q_msg.get_nowait()
         except queue.Empty:
             num_tries += 1
-            sleep(waiting_period)
-            waiting_period = min(waiting_period*2, 120)
-            print("queue empty, sleep for {} seconds".format(waiting_period))
-            continue
+            if num_tries > retry_times:
+                break
+            else:
+                sleep(waiting_period)
+                waiting_period = min(waiting_period*2, 120)
+                print("queue empty, sleep for {} seconds".format(waiting_period))
+                continue
 
         print("get message from the queue: {}".format(msg))
         waiting_period = 1
