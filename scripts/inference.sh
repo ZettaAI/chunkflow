@@ -4,13 +4,13 @@ source /workspace/chunkflow/scripts/init.sh
 source /workspace/chunkflow/env.sh
 
 if [ -n "$PYTORCH_MODEL_PKG" ]; then
-    try gsutil cp ${PYTORCH_MODEL_PKG} ./pytorch-model.tgz
+    try cloudfiles cp ${PYTORCH_MODEL_PKG} ./pytorch-model.tgz
     try tar zxvf pytorch-model.tgz -C /workspace/chunkflow
     export PYTHONPATH=/workspace/chunkflow/pytorch-model:$PYTHONPATH
 fi
 
 if [ -n "$ONNX_MODEL_PATH" ]; then
-    try gsutil cp ${ONNX_MODEL_PATH} /workspace/chunkflow/model.chkpt
+    try cloudfiles cp ${ONNX_MODEL_PATH} /workspace/chunkflow/model.chkpt
 fi
 
 export PYTHONPATH=/workspace/chunkflow/DeepEM:$PYTHONPATH
